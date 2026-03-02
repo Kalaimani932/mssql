@@ -1,0 +1,47 @@
+/* ================================
+   1️⃣ MAXDOP
+================================ */
+EXEC sp_configure 'max degree of parallelism';
+GO
+
+/* ================================
+   2️⃣ Cost Threshold for Parallelism
+================================ */
+EXEC sp_configure 'cost threshold for parallelism';
+GO
+
+/* ================================
+   3️⃣ Max Server Memory
+================================ */
+EXEC sp_configure 'max server memory (MB)';
+GO
+
+/* ================================
+   4️⃣ TempDB Configuration
+================================ */
+SELECT 
+    name AS LogicalName,
+    physical_name AS FileLocation,
+    CAST(size AS BIGINT) * 8 / 1024 AS Size_MB,
+    type_desc
+FROM sys.master_files
+WHERE database_id = 2;
+GO
+
+/* ================================
+   5️⃣ Always On Enabled Status
+================================ */
+SELECT 
+    SERVERPROPERTY('IsHadrEnabled') AS AlwaysOnEnabled;
+GO
+
+/* ================================
+   6️⃣ CPU & Memory Information
+================================ */
+SELECT 
+    cpu_count AS Total_CPUs,
+    hyperthread_ratio AS HyperThread_Ratio,
+    physical_memory_kb / 1024 AS PhysicalMemory_MB,
+    physical_memory_kb / 1024 / 1024 AS PhysicalMemory_GB
+FROM sys.dm_os_sys_info;
+GO
